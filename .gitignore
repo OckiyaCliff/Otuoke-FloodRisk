@@ -1,0 +1,31 @@
+# Environments
+.env
+.venv
+venv/
+ENV/
+env/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ML models
+backend/app/ml/models/*.joblib
+!backend/app/ml/models/latest_model.joblib
+
+# Node.js
+node_modules/
+dist/
+.svelte-kit/
+build/
+.vercel
+
+# Logs and databases
+*.log
+*.sqlite
+pgdata/
+
+# OS files
+.DS_Store
+Thumbs.db

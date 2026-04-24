@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 
 
+from .routes import weather, predictions, alerts, users
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup logic (e.g., DB connection check)
@@ -42,5 +44,8 @@ async def health_check():
     }
 
 
-# Router registration will happen here (weather, predictions, alerts, users)
-# app.include_router(weather.router, prefix="/api/weather", tags=["Weather"])
+# Router registration
+app.include_router(weather.router, prefix="/api/weather", tags=["Weather"])
+app.include_router(predictions.router, prefix="/api/predictions", tags=["Predictions"])
+app.include_router(alerts.router, prefix="/api/alerts", tags=["Alerts"])
+app.include_router(users.router, prefix="/api/users", tags=["Users"])
