@@ -24,6 +24,7 @@ build/
 # Logs and databases
 *.log
 *.sqlite
+celerybeat-schedule
 pgdata/
 
 # OS files
