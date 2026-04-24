@@ -4,6 +4,7 @@ from typing import List
 from ..database import get_db
 from ..schemas.prediction import Prediction, PredictionCreate
 from ..services.prediction_service import PredictionService
+import uuid
 
 from ..schemas.weather import WeatherDataBase
 from ..ml.predict import get_prediction
