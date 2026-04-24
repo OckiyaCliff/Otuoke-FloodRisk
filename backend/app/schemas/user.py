@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 import uuid
-from typing import Dict
+from typing import Dict, Optional
 
 
 class UserBase(BaseModel):
