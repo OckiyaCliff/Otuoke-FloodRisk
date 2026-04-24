@@ -2,6 +2,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
+from .database import engine
+from sqlalchemy import text
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 from .routes import weather, predictions, alerts, users
@@ -21,31 +28,48 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS configuration
-allow_origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
-
-# Add local dev origins if not present
+origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
 if settings.APP_ENV == "development":
-    dev_origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"]
-    for origin in dev_origins:
-        if origin not in allow_origins:
-            allow_origins.append(origin)
+    dev_origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8000"]
+    for o in dev_origins:
+        if o not in origins:
+            origins.append(o)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allow_origins,
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.error(f"Global exception: {exc}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "error": str(exc)},
+    )
+
+
+from fastapi.responses import JSONResponse
+
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint to verify system status."""
+    """Enhanced health check with DB connectivity test."""
+    db_status = "unknown"
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+            db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+        logger.error(f"Database health check failed: {e}")
+
     return {
-        "status": "ok",
-        "app": settings.APP_NAME,
+        "status": "ok" if "error" not in db_status else "degraded",
+        "database": db_status,
         "environment": settings.APP_ENV,
         "version": "1.0.0"
     }
