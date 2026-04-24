@@ -14,7 +14,7 @@ Production-ready flood early-warning platform for Federal University Otuoke. Thi
 
 For a full guide, see the [Setup Guide](file:///home/ockiya-cliff/.gemini/antigravity/brain/bbdefb79-517e-463f-a36c-8c95d8d0b59f/setup_guide.md).
 
-1. **Infrastructure**: `docker-compose up -d`
+1. **Infrastructure**: `docker compose up -d`
 2. **Backend**: `pip install -r requirements.txt && uvicorn app.main:app`
 3. **Frontend**: `npm install && npm run dev`
 
