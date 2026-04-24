@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --bg-nav: rgba(15, 23, 42, 0.8);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    --color-safe: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-critical: #7f1d1d;
+    
+    --accent-blue: #3b82f6;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-safe { background: rgba(34, 197, 94, 0.2); color: var(--color-safe); }
+.status-warning { background: rgba(245, 158, 11, 0.2); color: var(--color-warning); }
+.status-danger { background: rgba(239, 68, 68, 0.2); color: var(--color-danger); }
+
+h1, h2, h3 {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
