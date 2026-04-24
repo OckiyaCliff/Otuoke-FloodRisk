@@ -1,0 +1,62 @@
+services:
+  # Backend API
+  - type: web
+    name: floodrisk-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: floodrisk-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: floodrisk-redis
+          property: connectionString
+      - key: SUPRSEND_WORKSPACE_KEY
+        sync: false
+      - key: SUPRSEND_WORKSPACE_SECRET
+        sync: false
+
+  # Celery Worker
+  - type: worker
+    name: floodrisk-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A app.tasks.celery_app worker --loglevel=info
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: floodrisk-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: floodrisk-redis
+          property: connectionString
+
+  # Celery Beat (Periodic Tasks)
+  - type: worker
+    name: floodrisk-beat
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A app.tasks.celery_app beat --loglevel=info
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: floodrisk-redis
+          property: connectionString
+
+databases:
+  - name: floodrisk-db
+    region: oregon
+    plan: free
+
+# Redis Service
+  - type: redis
+    name: floodrisk-redis
+    region: oregon
+    plan: free

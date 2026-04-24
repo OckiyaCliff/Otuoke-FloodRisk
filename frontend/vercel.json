@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "framework": "sveltekit",
+    "buildCommand": "npm run build",
+    "outputDirectory": ".svelte-kit/output",
+    "env": {
+        "VITE_API_BASE_URL": "https://floodrisk-api.onrender.com/api"
+    },
+    "installCommand": "npm install"
+}
