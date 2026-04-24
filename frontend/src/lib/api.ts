@@ -20,19 +20,19 @@ async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise
 
 export const api = {
     // Weather
-    getLatestWeather: () => apiFetch<WeatherData>('/weather/latest'),
-    getWeatherHistory: (limit = 50) => apiFetch<WeatherData[]>(`/weather?limit=${limit}`),
+    getLatestWeather: () => apiFetch<WeatherData>('/weather/latest/'),
+    getWeatherHistory: (limit = 50) => apiFetch<WeatherData[]>(`/weather/?limit=${limit}`),
 
     // Predictions
-    getLatestPrediction: () => apiFetch<Prediction>('/predictions/latest'),
-    getPredictionsHistory: (limit = 50) => apiFetch<Prediction[]>(`/predictions?limit=${limit}`),
+    getLatestPrediction: () => apiFetch<Prediction>('/predictions/latest/'),
+    getPredictionsHistory: (limit = 50) => apiFetch<Prediction[]>(`/predictions/?limit=${limit}`),
 
     // Alerts
-    getAlerts: (limit = 50) => apiFetch<Alert[]>(`/alerts?limit=${limit}`),
+    getAlerts: (limit = 50) => apiFetch<Alert[]>(`/alerts/?limit=${limit}`),
 
     // Users
-    getUsers: () => apiFetch<User[]>('/users'),
-    registerUser: (userData: Partial<User>) => apiFetch<User>('/users', {
+    getUsers: () => apiFetch<User[]>('/users/'),
+    registerUser: (userData: Partial<User>) => apiFetch<User>('/users/', {
         method: 'POST',
         body: JSON.stringify(userData)
     })
