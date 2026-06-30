@@ -5,6 +5,8 @@ export interface WeatherData {
     humidity_pct: number;
     temperature_c: number;
     wind_speed_kmh: number;
+    pressure_hpa: number | null;
+    river_discharge_m3s: number | null;
     source: string;
     recorded_at: string;
     created_at: string;
@@ -14,6 +16,7 @@ export interface Prediction {
     id: string;
     weather_data_id: string;
     risk_level: 'No Risk' | 'Low' | 'Medium' | 'High' | 'Critical';
+    risk_score: number;
     confidence: number;
     model_version: string;
     created_at: string;

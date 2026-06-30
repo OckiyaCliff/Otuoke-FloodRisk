@@ -18,6 +18,13 @@ class PredictionService:
         return db_prediction
 
     @staticmethod
+    async def get_prediction_by_id(db: AsyncSession, prediction_id: uuid.UUID) -> Optional[Prediction]:
+        """Fetch a specific prediction by its UUID."""
+        query = select(Prediction).where(Prediction.id == prediction_id)
+        result = await db.execute(query)
+        return result.scalars().first()
+
+    @staticmethod
     async def get_latest_prediction(db: AsyncSession) -> Optional[Prediction]:
         """Fetch the most recent flood risk prediction."""
         query = select(Prediction).order_by(desc(Prediction.created_at)).limit(1)

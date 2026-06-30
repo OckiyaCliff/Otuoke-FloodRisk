@@ -6,6 +6,7 @@ import uuid
 class PredictionBase(BaseModel):
     weather_data_id: uuid.UUID
     risk_level: str
+    risk_score: float = 0.0
     confidence: float
     model_version: str
 

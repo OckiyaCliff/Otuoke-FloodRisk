@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import desc
 from typing import List, Optional
+import uuid
 from ..models.weather import WeatherData
 from ..schemas.weather import WeatherDataCreate
 
@@ -15,6 +16,13 @@ class WeatherService:
         await db.commit()
         await db.refresh(db_weather)
         return db_weather
+
+    @staticmethod
+    async def get_reading_by_id(db: AsyncSession, reading_id: uuid.UUID) -> Optional[WeatherData]:
+        """Fetch a specific weather reading by its UUID."""
+        query = select(WeatherData).where(WeatherData.id == reading_id)
+        result = await db.execute(query)
+        return result.scalars().first()
 
     @staticmethod
     async def get_latest_reading(db: AsyncSession) -> Optional[WeatherData]:

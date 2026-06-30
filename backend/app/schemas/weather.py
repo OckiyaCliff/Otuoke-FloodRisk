@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 import uuid
+from typing import Optional
 
 
 class WeatherDataBase(BaseModel):
@@ -9,7 +10,9 @@ class WeatherDataBase(BaseModel):
     humidity_pct: float
     temperature_c: float
     wind_speed_kmh: float
-    source: str = "simulated"
+    pressure_hpa: Optional[float] = None
+    river_discharge_m3s: Optional[float] = None
+    source: str = "open-meteo"
 
 
 class WeatherDataCreate(WeatherDataBase):

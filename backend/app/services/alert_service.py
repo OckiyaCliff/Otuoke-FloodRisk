@@ -2,11 +2,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import desc
 from typing import List, Optional
+from datetime import datetime
 import uuid
 from ..models.alert import Alert
 from ..schemas.alert import AlertCreate
 from ..config import settings
-# from suprsend import Suprsend  # Will be used in the service logic
+# from suprsend import Suprsend  # Will be used when SuprSend keys are configured
 
 
 class AlertService:
@@ -27,6 +28,13 @@ class AlertService:
         return list(result.scalars().all())
 
     @staticmethod
+    async def get_recent_alerts_since(db: AsyncSession, since: datetime) -> List[Alert]:
+        """Fetch alerts created after a given timestamp (for deduplication)."""
+        query = select(Alert).where(Alert.created_at >= since)
+        result = await db.execute(query)
+        return list(result.scalars().all())
+
+    @staticmethod
     async def trigger_notification(alert: Alert):
         """
         Trigger a notification event via SuprSend.
@@ -42,5 +50,5 @@ class AlertService:
         #         "message": alert.message
         #     }
         # })
-        print(f"NOTIFICATION TRIGGERED: {alert.severity} to {alert.recipient} - {alert.message}")
+        print(f"NOTIFICATION TRIGGERED: {alert.severity} to {alert.recipient} - {alert.message[:80]}...")
         pass

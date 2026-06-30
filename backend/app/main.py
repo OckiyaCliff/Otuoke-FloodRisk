@@ -1,33 +1,41 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from .config import settings
 from .database import engine
 from sqlalchemy import text
 import logging
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure structured logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
-
 
 from .routes import weather, predictions, alerts, users
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup logic (e.g., DB connection check)
-    print(f"Starting {settings.APP_NAME} in {settings.APP_ENV} mode...")
+    """Application startup and shutdown lifecycle."""
+    logger.info(f"Starting {settings.APP_NAME} in {settings.APP_ENV} mode...")
+    logger.info(f"Otuoke coordinates: ({settings.OTUOKE_LATITUDE}, {settings.OTUOKE_LONGITUDE})")
     yield
-    # Shutdown logic
-    print(f"Shutting down {settings.APP_NAME}...")
+    logger.info(f"Shutting down {settings.APP_NAME}...")
 
 
 app = FastAPI(
     title=settings.APP_NAME,
-    version="1.0.0",
+    version="2.0.0",
+    description="Flood early-warning system for Federal University Otuoke, Bayelsa State. "
+                "Powered by Open-Meteo real-time data and Random Forest ML predictions.",
     lifespan=lifespan,
 )
 
+# CORS configuration
 origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
 if settings.APP_ENV == "development":
     dev_origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8000"]
@@ -53,8 +61,6 @@ async def global_exception_handler(request, exc):
     )
 
 
-from fastapi.responses import JSONResponse
-
 @app.get("/api/health")
 async def health_check():
     """Enhanced health check with DB connectivity test."""
@@ -71,7 +77,13 @@ async def health_check():
         "status": "ok" if "error" not in db_status else "degraded",
         "database": db_status,
         "environment": settings.APP_ENV,
-        "version": "1.0.0"
+        "version": "2.0.0",
+        "data_source": "Open-Meteo API",
+        "location": {
+            "name": "Otuoke, Bayelsa State",
+            "lat": settings.OTUOKE_LATITUDE,
+            "lon": settings.OTUOKE_LONGITUDE
+        }
     }
 
 
