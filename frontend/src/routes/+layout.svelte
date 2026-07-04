@@ -1,8 +1,22 @@
 <script lang="ts">
     import "../app.css";
+    import { onMount } from "svelte";
     const { children } = $props();
 
     let mobileMenuOpen = $state(false);
+    let theme = $state("dark");
+
+    onMount(() => {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        theme = savedTheme;
+        document.documentElement.setAttribute("data-theme", theme);
+    });
+
+    function toggleTheme() {
+        theme = theme === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }
 
     function toggleMenu() {
         mobileMenuOpen = !mobileMenuOpen;
@@ -29,19 +43,26 @@
             </span>
         </a>
 
-        <!-- Desktop Nav -->
-        <div class="nav-links desktop-only">
-            <a href="/">Dashboard</a>
-            <a href="/history">History</a>
-            <a href="/alerts">Alerts</a>
-        </div>
+        <div class="nav-right">
+            <!-- Desktop Nav -->
+            <div class="nav-links desktop-only">
+                <a href="/">Dashboard</a>
+                <a href="/history">History</a>
+                <a href="/alerts">Alerts</a>
+            </div>
 
-        <!-- Hamburger Button -->
-        <button class="hamburger mobile-only" onclick={toggleMenu} aria-label="Toggle menu">
-            <span class="bar" class:open={mobileMenuOpen}></span>
-            <span class="bar" class:open={mobileMenuOpen}></span>
-            <span class="bar" class:open={mobileMenuOpen}></span>
-        </button>
+            <!-- Theme Toggle Button -->
+            <button class="theme-toggle" onclick={toggleTheme} aria-label="Toggle Theme">
+                {theme === "dark" ? "☀️" : "🌙"}
+            </button>
+
+            <!-- Hamburger Button -->
+            <button class="hamburger mobile-only" onclick={toggleMenu} aria-label="Toggle menu">
+                <span class="bar" class:open={mobileMenuOpen}></span>
+                <span class="bar" class:open={mobileMenuOpen}></span>
+                <span class="bar" class:open={mobileMenuOpen}></span>
+            </button>
+        </div>
     </div>
 
     <!-- Mobile Dropdown -->
@@ -91,6 +112,31 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.15rem;
+        padding: 0.35rem;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        min-height: 32px;
+        transition: background-color 0.2s;
+    }
+
+    .theme-toggle:hover {
+        background-color: var(--border-color);
     }
 
     .logo {

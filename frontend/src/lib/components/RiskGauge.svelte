@@ -17,7 +17,7 @@
         }
     };
 
-    const isHighRisk = riskLevel === 'High' || riskLevel === 'Critical';
+    const isHighRisk = $derived(riskLevel === 'High' || riskLevel === 'Critical');
 </script>
 
 <div class="risk-gauge card" class:pulse-danger={isHighRisk}>
@@ -58,12 +58,12 @@
 
     .gauge-container {
         position: relative;
-        margin-top: 0.75rem;
+        margin-top: 0.5rem;
     }
 
     svg {
         width: 100%;
-        max-width: clamp(180px, 40vw, 250px);
+        max-width: clamp(140px, 30vw, 180px);
         margin: 0 auto;
         display: block;
     }
@@ -79,7 +79,7 @@
     }
 
     .level-text {
-        font-size: clamp(1.375rem, 5vw, 2rem);
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: -0.025em;
@@ -87,12 +87,12 @@
 
     .confidence-text {
         color: var(--text-secondary);
-        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        font-size: clamp(0.7rem, 2vw, 0.8rem);
         margin-top: -0.125rem;
     }
 
     .score-text {
         color: var(--text-muted);
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
 </style>

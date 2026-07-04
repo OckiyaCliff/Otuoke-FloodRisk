@@ -25,8 +25,9 @@
     .weather-card {
         display: flex;
         align-items: center;
-        gap: clamp(0.75rem, 3vw, 1.25rem);
+        gap: 0.75rem;
         min-width: 0;
+        padding: 0.6rem 0.8rem;
     }
 
     .weather-card:hover {
@@ -38,10 +39,10 @@
     }
 
     .icon {
-        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
         background: var(--accent-blue-bg);
-        width: clamp(48px, 10vw, 60px);
-        height: clamp(48px, 10vw, 60px);
+        width: clamp(36px, 8vw, 42px);
+        height: clamp(36px, 8vw, 42px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -56,7 +57,7 @@
 
     .label {
         color: var(--text-muted);
-        font-size: clamp(0.6875rem, 2vw, 0.8125rem);
+        font-size: clamp(0.65rem, 2vw, 0.75rem);
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.06em;
@@ -69,13 +70,13 @@
     }
 
     .value {
-        font-size: clamp(1.25rem, 4vw, 1.625rem);
+        font-size: clamp(1.1rem, 3vw, 1.35rem);
         font-weight: 700;
         color: var(--text-primary);
     }
 
     .unit {
         color: var(--text-secondary);
-        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        font-size: clamp(0.7rem, 2vw, 0.8rem);
     }
 </style>
