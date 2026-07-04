@@ -2,7 +2,7 @@ from .celery_app import celery_app
 from ..services.prediction_service import PredictionService
 from ..services.alert_service import AlertService
 from ..services.user_service import UserService
-from ..database import AsyncSessionLocal
+from ..database import AsyncSessionLocal, engine
 from ..schemas.alert import AlertCreate
 import asyncio
 import uuid
@@ -93,4 +93,8 @@ def alert_dispatch_job(self, prediction_id: str):
         logger.error(f"Alert dispatch failed: {exc}")
         self.retry(exc=exc, countdown=60)
     finally:
+        try:
+            loop.run_until_complete(engine.dispose())
+        except Exception as e:
+            logger.error(f"Error disposing engine pool: {e}")
         loop.close()

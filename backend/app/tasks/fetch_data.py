@@ -1,7 +1,7 @@
 from .celery_app import celery_app
 from ..services.weather_service import WeatherService
 from ..schemas.weather import WeatherDataCreate
-from ..database import AsyncSessionLocal
+from ..database import AsyncSessionLocal, engine
 from ..config import settings
 import httpx
 import asyncio
@@ -87,4 +87,8 @@ def fetch_weather_job():
     try:
         loop.run_until_complete(fetch_weather_task())
     finally:
+        try:
+            loop.run_until_complete(engine.dispose())
+        except Exception as e:
+            logger.error(f"Error disposing engine pool: {e}")
         loop.close()

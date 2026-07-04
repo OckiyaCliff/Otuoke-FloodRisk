@@ -2,7 +2,7 @@ from .celery_app import celery_app
 from ..services.weather_service import WeatherService
 from ..services.prediction_service import PredictionService
 from ..ml.predict import get_prediction
-from ..database import AsyncSessionLocal
+from ..database import AsyncSessionLocal, engine
 from ..schemas.prediction import PredictionCreate
 import uuid
 import asyncio
@@ -78,4 +78,8 @@ def prediction_job(self, weather_reading_id: str):
         logger.error(f"Prediction task failed: {exc}")
         self.retry(exc=exc, countdown=30)
     finally:
+        try:
+            loop.run_until_complete(engine.dispose())
+        except Exception as e:
+            logger.error(f"Error disposing engine pool: {e}")
         loop.close()
