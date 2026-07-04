@@ -16,8 +16,8 @@ from app.models.user import User
 async def init_models():
     print("Connecting to database and creating tables...")
     async with engine.begin() as conn:
-        # Drop all tables first if you want a clean slate (optional, commented out)
-        # await conn.run_sync(Base.metadata.drop_all)
+        # Drop all tables first if you want a clean slate
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
     print("Database tables created successfully!")
 

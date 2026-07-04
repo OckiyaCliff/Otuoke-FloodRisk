@@ -17,7 +17,7 @@ class User(Base):
     preferences: Mapped[dict] = mapped_column(JSON, default=lambda: {"notifications": {"email": True, "sms": True, "push": True}})
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
     def __repr__(self) -> str:

@@ -36,7 +36,7 @@ Navigate to the `backend/` directory and configure the environment:
    ```
 4. Verify your `.env` configuration file exists. It should point to your PostgreSQL database and Redis server:
    ```env
-   DATABASE_URL=postgresql+asyncpg://floodrisk:floodrisk_dev@localhost:5432/floodrisk
+   DATABASE_URL=postgresql+asyncpg://floodrisk:floodrisk_dev@localhost:5433/floodrisk
    REDIS_URL=redis://localhost:6379/0
    APP_ENV=development
    ```
